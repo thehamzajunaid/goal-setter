@@ -146,12 +146,40 @@ will run the browser. We will later see how to run both server and server at the
 
 Clean the 'App.js' file. 
 Decide the pages fot your application and then make a folder in frontend with the name 'pages' and in
-that folder add all all your page files. For different components create a folder named 'components'
-in which we will be putting all of our components. 
+that folder add all all your page files. For different components create a folder named 'components' in the
+src folder in which we will be putting all of our components. 
 
 In the App.js file import react-router-dom because we will be working with riutes in that file. 
 
 Write the code for your pages. We wrote for register.js fist in this application. Pure react logic
 no server interaction yet. 
 
+Setup the folder structure for the redux store. Create a folder named 'app' in which 
+we will create file named 'store.js'. This file contains our redux store for the app.
+Create a 'features' folder in the src which will contain
+folders based on the name of the domain of the features. For example we will have 'auth' folder in 
+it which will have our authSlice of our global state. In this file we will create our authReducer 
+which will be used to update our state provided we give it some action to perform.
 
+We use 'createSlice()' method of redux to make a slice of the state. 
+authSlice has normal actions within the authSlice function but also Thunk fnctions for 
+asynchronous actions. We use 'createAsyncthunk()' function of the redux toolkit to create a Thunk
+action creator. This function make use of http service calls to grab data from the request. 
+For this we usually create a separate file to manage the service calls. here we have a file named 
+'authService' in which we are making use of axios for the same work that we used to do with postman. 
+Its just that now we want to do the same work by coding. 
+
+The axios requests return the responses and we pass the data back to our async thunk action creator
+in our authSlice file to be used. 
+
+The thunk action creators have their states as 'pending', 'fulfilled' and 'rejected'
+These states are used in the 'exraReducers' key of the authSlice function. 
+
+The async thunk actions are handled in the extraReducers part of our authSlice. 
+
+Now when we have our authSlice almost complete we will start coding for the events to be handled
+by our frontend. 
+
+We will implement login functionality also using the auth token that we used in our backend.
+We will crosscheck if the user that is trying to login has the key that we gave them while 
+he was registering on our website.

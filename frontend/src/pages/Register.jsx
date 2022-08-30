@@ -1,5 +1,10 @@
 import {useState, useEffect} from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { toast} from 'react-toastify'
+import {register, reset} from '../features/auth/authSlice'
 import {FaUser} from 'react-icons/fa'
+import Spinner from '../components/Spinner'
 
 function Register() {
 
@@ -12,6 +17,27 @@ function Register() {
 
   const {name, email, password, password2} = formData
 
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  
+  const {user, isLoading, isError, isSucces, message} = useSelector(
+    (state) => 
+    state.auth)
+
+  
+  useEffect(() => {
+    if (isError){
+      toast.error(message)
+    }
+
+    if(isSucces || user){
+      navigate('/')
+    }
+
+    dispatch(reset())
+
+  }, [isError, isSucces, user, message, navigate, dispatch])
+    
   const onChange = (e) => {
     setFormData(prevState => ({
       ...prevState,
@@ -22,8 +48,25 @@ function Register() {
 
   const onSubmit = (e) => {
     e.preventDefault()
+
+    if (password !== password2){
+      toast.error('Passwords do not match')
+    } else {
+      const userData = {
+        name,
+        email,
+        password
+      }
+
+      dispatch(register(userData))
+    }
+
+    
   }
 
+  if (isLoading){
+    return <Spinner/>
+  }
 
   return (
     <>
@@ -45,6 +88,7 @@ function Register() {
              value={name}
              placeholder='Enter your name'
              onChange={onChange} 
+             autoComplete='off'
             />
           </div>
           <div className="form-group">
@@ -56,28 +100,31 @@ function Register() {
              value={email}
              placeholder='Enter your email'
              onChange={onChange} 
+             autoComplete='off'
             />
           </div>
           <div className="form-group">
             <input
-             type="text"
+             type="password"
              className='form-control'
              id='password'
              name='password'
              value={password}
              placeholder='Enter your password'
              onChange={onChange} 
+             autoComplete='off'
             />
           </div>
           <div className="form-group">
             <input
-             type="text"
+             type="password"
              className='form-control'
              id='password2'
              name='password2'
              value={password2}
              placeholder='Confrim password'
              onChange={onChange} 
+             autoComplete='off'
             />
           </div>
           <div className="form-group">

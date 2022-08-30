@@ -1,5 +1,12 @@
 import {useState, useEffect} from 'react'
 import {FaSignInAlt} from 'react-icons/fa'
+import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { toast} from 'react-toastify'
+import {login, reset} from '../features/auth/authSlice'
+import {FaUser} from 'react-icons/fa'
+import Spinner from '../components/Spinner'
+import { reset as goalreset} from '../features/goals/goalSlice'   
 
 function Login() {
 
@@ -8,8 +15,38 @@ function Login() {
     password: '',
   })
 
+ 
+  
   const {email, password} = formData
 
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  
+  const {user, isLoading, isError, isSucces, message} = useSelector(
+    (state) => 
+    state.auth)
+
+  useEffect(() => {
+  if (isError){
+      toast.error(message)
+    }
+  
+    if(isSucces || user){
+      navigate('/')
+    }
+  
+    dispatch(reset())
+  
+  }, [isError, isSucces, user, message, navigate, dispatch])
+
+  
+////////  To clear goals in state when our user logs out and 'user' is deleted from localStorage  ///////
+  useEffect( () =>{
+    if (!user) {
+      dispatch(goalreset())
+    }
+  })
+///////////////
   const onChange = (e) => {
     setFormData(prevState => ({
       ...prevState,
@@ -20,6 +57,17 @@ function Login() {
 
   const onSubmit = (e) => {
     e.preventDefault()
+
+    const userData = {
+      email,
+      password
+    }
+
+    dispatch(login(userData))
+  }
+
+  if (isLoading){
+    return <Spinner/>
   }
 
 
@@ -43,17 +91,19 @@ function Login() {
              value={email}
              placeholder='Enter your email'
              onChange={onChange} 
+             autoComplete='off'
             />
           </div>
           <div className="form-group">
             <input
-             type="text"
+             type="password"
              className='form-control'
              id='password'
              name='password'
              value={password}
              placeholder='Enter your password'
-             onChange={onChange} 
+             onChange={onChange}
+             autoComplete='off' 
             />
           </div>
           <div className="form-group">

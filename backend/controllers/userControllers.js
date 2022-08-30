@@ -83,13 +83,11 @@ const loginUser = asyncHandler(async (req, res) => {
 //method GET
 //@access private  (we protect it using 'protect' middleware)
 const getMe = asyncHandler(async (req, res) => {
-    const {_id, name, email} = await User.findById(req.user.id)
+    // const {_id, name, email} = await User.findById(req.user.id)
+    // there's no need to find user again since in our auth middleware we are saving user in 
+    // ' req.user ' 
 
-    res.json({
-        id: _id,
-        name,
-        email
-    })
+    res.status(200).json(req.user)
 })
 
 
