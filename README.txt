@@ -1,3 +1,3 @@
-I have deployed this applucation using heroku. You can visit it using the following link.
+I have deployed this application using heroku. You can visit it using the following link.
 
-[Goal Setter web application](https://set-your-goals.herokuapp.com/login)
+..* [Goal Setter web application](https://set-your-goals.herokuapp.com/login)
