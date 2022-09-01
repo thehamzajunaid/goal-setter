@@ -7,7 +7,7 @@ const User = require('../models/userModel')
 // @routes GET /api/goals
 // @access Private
 const getGoals = asyncHandler(async (req, res) => {
-    const goals = await Goal.find({ user: req.user.id })    //yeh woh user hai jo token se nikla hai(authMiddleware main)
+    const goals = await Goal.find({ user: req.user.id })    //The user that we decddoed from the token (in authMiddleware)
     
     res.status(200).json(goals)
 })
